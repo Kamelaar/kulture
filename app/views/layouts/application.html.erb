@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= Rails.configuration.application_name %></title>
+    <%= csrf_meta_tags %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'https://js.stripe.com/v3/' %>
+    <%= tag :meta, name: "stripe-key", content: Rails.application.credentials.stripe_publishable_key %>
+
+
+  </head>
+
+  <body class="<%= yield (:body_class) %>">
+    <% if flash[:notice] %>
+      <div class="notification is-success global-notification">
+        <p class="notice"><%= notice %></p>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+    <div class="notification is-danger global-notification">
+      <p class="alert"><%= alert %></p>
+    </div>
+    <% end %>
+
+     <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <%= link_to root_path, class:"navbar-item" do %>
+          <h1 class="title is-4 has-text-white"><%= Rails.configuration.application_name %></h1>
+        <% end  %>
+        <div class="navbar-burger burger" data-target="navbar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div id="navbar" class="navbar-menu">
+        <div class="navbar-start">
+
+          <% if subscribed? %>
+            <div class="navbar-item">
+              <%= link_to 'Ma liste de lecture', library_index_path , class: 'is-5 has-text-white' %>
+            </div>
+          <% end %>
+
+            <div class="navbar-item">
+              <%= link_to 'Tous les livres', categories_path, class: 'is-5 has-text-white' %>
+            </div>
+
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+
+            <% if admin? %>
+              <div class="navbar-item">
+                <%= link_to 'Ajouter un genre', new_category_path, class: 'is-5 has-text-white' %>
+              </div>
+              <div class="navbar-item">
+                <%= link_to 'Ajouter un livre', new_book_path, class: 'is-5 has-text-white' %>
+              </div>
+            <% end %>
+
+            <div class="field is-grouped">
+            <% if user_signed_in? %>
+
+              <div class="navbar-item has-dropdown is-hoverable">
+                <%= link_to 'Mon compte', edit_user_registration_path, class: "navbar-link" %>
+                <div class="navbar-dropdown is-right">
+                  <%= link_to edit_user_registration_path, class:"navbar-item" do %>
+                    <%= current_user.name %> <% if admin? %> &nbsp; <span class="tag is-warning">ADMIN</span> <% end %>
+                  <% end %>
+                  <%= link_to "Log Out", destroy_user_session_path, method: :delete, class:"navbar-item" %>
+                </div>
+              </div>
+            <% else %>
+             <div class="navbar-item">
+              <%= link_to 'Abonnez-vous', pricing_index_path, class: 'is-5 has-text-white' %>
+            </div>
+             <div class="navbar-item">
+              <%= link_to "Se connecter", new_user_session_path, class: 'is-5 has-text-white' %>
+            </div>
+             <div class="navbar-item">
+              <%= link_to "S'inscrire", new_user_registration_path, class: 'is-5 has-text-white'%>
+            </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+    <div class="container">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

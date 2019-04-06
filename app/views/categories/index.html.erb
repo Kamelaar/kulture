@@ -1,0 +1,39 @@
+<section class="hero">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">
+        Tous les livres 
+      </h1>
+    </div>
+  </div>
+</section>
+
+
+<table class = "table is-fullwidth ">
+  <thead>
+    <tr>
+      <th>Genre</th>
+      <th>Description</th>
+      <th colspan = "3">Action</th>
+    </tr>
+  </thead>
+
+  <tbody class = 'is-size-6'>
+    <% @categories.each do |category| %>
+      <tr>
+        <td> <p class = "is-size-6"> <%= category.name %> </p> </td>
+        <td> <p class = "is-size-6"> <%= category.desc %> </p> </td>
+        <td> <%= link_to 'Voir les livres', category, class:"button is-primary" %> </td>
+        <% if admin? %>
+          <td> <%= link_to 'Modification', edit_category_path(category), class:"button is-warning" %> </td>
+          <td> <%= link_to 'Suppression', category, method: :delete, data: { confirm: 'Êtes-vous sûr?' }, class:"button is-danger" %> </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% if admin? %>
+  <%= link_to 'Ajouter un genre', new_category_path, class:"button is-black" %>
+<% end %>

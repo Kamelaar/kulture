@@ -1,0 +1,55 @@
+<section class="hero">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">
+        Les livres du genre <%= @category.name %> 
+      </h1>
+    </div>
+  </div>
+</section>
+
+<table class = "table is-fullwidth">
+<% Book.where(category_id: @category.id).each do |book| %>
+	<thead>
+		<tr>
+			<th>Couverture</th>
+			<th>Titre</th>
+			<th>Auteur</th>
+			<th>Résumé</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td> <%= image_tag book.thumbnail.variant(resize: "160x240"), alt: "#{book.title} by #{book.author}" %> </td>
+			<td> <p class = "is-size-6"> <%= book.title %> </p> </td>
+			<td> <p class = "is-size-6"> <%= book.author %> </p> </td>
+			<td> <p class = "is-size-6"> <%= book.description %> </p> </td>
+			<td> 
+				<% if subscribed? %>
+
+		          <% if user_added_to_library?(current_user, book) %>
+
+		            <%= link_to 'Retirer de ma liste', add_book_path(book, type: "remove"), method: :put, class: "button is-danger is-fullwidth" %>
+
+		            <% if controller.controller_name == "library" %>
+		              <%= link_to 'Télécharger', '#', class:"button is-success is-fullwidth mt1" %>
+		            <% end %>
+
+		          <% else %>
+		            <%= link_to 'Ajouter à ma liste', add_book_path(book, type: "add"), method: :put, class: "button is-link is-fullwidth" %>
+		          <% end %>
+
+		        <% else %>
+		          <%= link_to 'Ajouter à ma liste', new_user_registration_path, class: "button is-link is-fullwidth" %>
+	        	<% end %> 
+    		</td>
+		</tr>
+	</tbody>
+<% end %>
+</table>
+
+<% if admin? %>
+	<%= link_to 'Modifier le genre', edit_category_path(@category), class: "button is-black"  %>
+<% end %>
+	<%= link_to 'Retour', categories_path, class: "button is-light"  %>

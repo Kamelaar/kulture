@@ -1,0 +1,29 @@
+<section class="hero is-light is-bold">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">
+        <i class="fa fa-book"></i> Bienvenue dans le haut lieu de la culture
+      </h1>
+      <h2 class="subtitle">
+        Jetez un oeil aux dernières parutions
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <h3 class="title has-text-centered"> Classique </h3>
+  <div class="book-grid">
+ <%= render @classic_books %>
+  </div> <br />
+    <h3 class="title has-text-centered"> Science fiction </h3>
+    <div class="book-grid">
+      <%= render @sf_books %>
+    </div> <br />
+    <h3 class="title has-text-centered"> Policier </h3>
+    <div class="book-grid">
+      <%= render @police_books %>
+    </div>
+</section>
